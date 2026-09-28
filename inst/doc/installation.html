@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Installing fastPLS</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Installing fastPLS</h1>
+
+
+
+<div id="installation-model" class="section level2">
+<h2>Installation model</h2>
+<p><code>fastPLS</code> always contains a compiled CPU implementation.
+Apple Metal and NVIDIA CUDA are optional backends selected while the
+package is compiled. The package does not download CUDA, OpenBLAS, or
+other native libraries after installation. This avoids changing an
+installed package’s native dependencies and ensures that every linked
+library matches the operating system and CPU architecture.</p>
+<p>The default source-build policy is:</p>
+<ul>
+<li>macOS uses Apple Accelerate and enables Metal when its system
+frameworks are available;</li>
+<li>Linux and Windows use OpenBLAS when a compatible installation is
+found and otherwise use the BLAS/LAPACK supplied by R;</li>
+<li>Linux and Windows x86-64 enable CUDA when a compatible CUDA Toolkit
+is found;</li>
+<li>unavailable accelerators are omitted from the build, while the CPU
+backend remains available.</li>
+</ul>
+<p>Backend availability is established at installation time. Requesting
+an accelerator that was not compiled and is not available produces an
+error; fastPLS does not silently run the operation on the CPU.</p>
+</div>
+<div id="standard-installation" class="section level2">
+<h2>Standard installation</h2>
+<p>Install the released package from CRAN:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;fastPLS&quot;</span>)</span></code></pre></div>
+<p>The development version can be installed from GitHub. Use a fresh R
+session when replacing an existing installation.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;remotes&quot;</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>    <span class="st">&quot;tkcaccia/fastPLS&quot;</span>,</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>    <span class="at">upgrade =</span> <span class="st">&quot;never&quot;</span>,</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>    <span class="at">force =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>    <span class="at">build_vignettes =</span> <span class="cn">TRUE</span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>)</span></code></pre></div>
+<p>Binary packages contain only the capabilities compiled by their
+builder. To enable a locally installed CUDA Toolkit or Apple Metal,
+install fastPLS from source on that computer.</p>
+</div>
+<div id="macos" class="section level2">
+<h2>macOS</h2>
+<p>Install Apple’s command-line developer tools before compiling from
+source:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="ex">xcode-select</span> <span class="at">--install</span></span></code></pre></div>
+<p>Apple Accelerate supplies the CPU BLAS/LAPACK implementation. A
+separate OpenBLAS installation is neither required nor recommended for
+ordinary macOS use. Metal is enabled automatically when its frameworks
+are available.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">Sys.setenv</span>(<span class="at">FASTPLS_USE_METAL =</span> <span class="st">&quot;1&quot;</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>    <span class="st">&quot;tkcaccia/fastPLS&quot;</span>,</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>    <span class="at">force =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>    <span class="at">upgrade =</span> <span class="st">&quot;never&quot;</span>,</span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>    <span class="at">build_vignettes =</span> <span class="cn">TRUE</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>)</span></code></pre></div>
+<p>Setting <code>FASTPLS_USE_METAL=1</code> makes a missing Metal
+toolchain an installation error. Omit it to use automatic detection, or
+set it to <code>0</code> for a CPU-only build.</p>
+</div>
+<div id="ubuntu-and-debian" class="section level2">
+<h2>Ubuntu and Debian</h2>
+<p>Install the compiler toolchain and OpenBLAS development files before
+building fastPLS:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">sudo</span> apt update</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="fu">sudo</span> apt install build-essential gfortran pkg-config libopenblas-dev</span></code></pre></div>
+<p>The following setting requires OpenBLAS and prevents an unnoticed
+fallback to R’s BLAS/LAPACK:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">Sys.setenv</span>(<span class="at">FASTPLS_USE_OPENBLAS =</span> <span class="st">&quot;1&quot;</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;fastPLS&quot;</span>, <span class="at">type =</span> <span class="st">&quot;source&quot;</span>)</span></code></pre></div>
+<p>For performance work, requiring the OpenBLAS family is necessary but
+not sufficient. Record the exact OpenBLAS release and the CPU kernel
+selected at runtime. An older dynamic-architecture build may recognize
+the library as OpenBLAS while selecting a generic or legacy kernel on a
+newer processor, which can substantially change matrix-multiplication
+timings. Prefer a current build compiled for the target
+architecture.</p>
+</div>
+<div id="fedora" class="section level2">
+<h2>Fedora</h2>
+<p>Install the corresponding Fedora development packages:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">sudo</span> dnf install gcc gcc-c++ gcc-gfortran make pkgconf-pkg-config <span class="dt">\</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>    openblas-devel</span></code></pre></div>
+<p>Then install fastPLS from source with
+<code>FASTPLS_USE_OPENBLAS=1</code>, as shown for Ubuntu.</p>
+</div>
+<div id="windows-x86-64" class="section level2">
+<h2>Windows x86-64</h2>
+<p>Install the Rtools release matching the installed R version. A
+standard source installation works without a separate OpenBLAS
+installation and uses the BLAS/LAPACK supplied by R when OpenBLAS is
+unavailable.</p>
+<p>For faster CPU execution, install an x86-64 OpenBLAS development
+archive. For example, OpenBLAS can be installed from an MSYS2 UCRT64
+terminal:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="ex">pacman</span> <span class="at">-S</span> <span class="at">--needed</span> mingw-w64-ucrt-x86_64-openblas</span></code></pre></div>
+<p>Point the package configuration to that prefix:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">Sys.setenv</span>(</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>    <span class="at">FASTPLS_USE_OPENBLAS =</span> <span class="st">&quot;1&quot;</span>,</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>    <span class="at">OPENBLAS_ROOT =</span> <span class="st">&quot;C:/msys64/ucrt64&quot;</span></span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>)</span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(</span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>    <span class="st">&quot;tkcaccia/fastPLS&quot;</span>,</span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a>    <span class="at">force =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a>    <span class="at">upgrade =</span> <span class="st">&quot;never&quot;</span>,</span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a>    <span class="at">build_vignettes =</span> <span class="cn">TRUE</span></span>
+<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a>)</span></code></pre></div>
+</div>
+<div id="windows-arm64" class="section level2">
+<h2>Windows ARM64</h2>
+<p>Every linked static library must be compiled for ARM64. Do not set
+<code>OPENBLAS_ROOT</code> to an x86-64 Rtools or MSYS2 directory.
+fastPLS checks the target architecture and rejects incompatible OpenBLAS
+archives rather than allowing the linker to combine x86-64 and ARM64
+objects.</p>
+<p>When a compatible ARM64 OpenBLAS installation is unavailable, retain
+the default automatic policy:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">Sys.unsetenv</span>(<span class="fu">c</span>(<span class="st">&quot;OPENBLAS_ROOT&quot;</span>, <span class="st">&quot;FASTPLS_USE_OPENBLAS&quot;</span>))</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>    <span class="st">&quot;tkcaccia/fastPLS&quot;</span>,</span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>    <span class="at">force =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>    <span class="at">upgrade =</span> <span class="st">&quot;never&quot;</span>,</span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>    <span class="at">build_vignettes =</span> <span class="cn">TRUE</span></span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a>)</span></code></pre></div>
+<p>This builds the CPU backend with R’s BLAS/LAPACK and portable float32
+kernels. The current Windows CUDA build requires the x86-64 NVIDIA
+toolkit and is not enabled for Windows ARM64.</p>
+</div>
+<div id="nvidia-cuda-on-linux-or-windows-x86-64" class="section level2">
+<h2>NVIDIA CUDA on Linux or Windows x86-64</h2>
+<p>A CUDA-capable NVIDIA driver alone is not sufficient to compile
+fastPLS. The CUDA Toolkit, including <code>nvcc</code>, headers, cuBLAS,
+cuSOLVER, cuRAND, and runtime libraries, must be installed before the R
+package. cuDNN is not required. The driver and toolkit are separate.
+fastPLS never installs, removes, upgrades, or downgrades the host NVIDIA
+driver. Do not install Debian’s <code>nvidia-cuda-toolkit</code> package
+merely to build fastPLS on a computer with a working vendor driver. Use
+a compatible NVIDIA toolkit installed separately, or a controlled NVIDIA
+CUDA container with host-GPU passthrough.</p>
+<p>If CUDA is installed in a standard location, the default
+<code>auto</code> policy detects it. For a reproducible source build,
+provide the toolkit location and require CUDA explicitly:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="fu">Sys.setenv</span>(</span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>    <span class="at">FASTPLS_USE_CUDA =</span> <span class="st">&quot;1&quot;</span>,</span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>    <span class="at">FASTPLS_REQUIRE_CUDA =</span> <span class="st">&quot;1&quot;</span>,</span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>    <span class="at">CUDA_HOME =</span> <span class="st">&quot;/usr/local/cuda&quot;</span></span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a>)</span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;fastPLS&quot;</span>, <span class="at">type =</span> <span class="st">&quot;source&quot;</span>)</span></code></pre></div>
+<p>On Windows x86-64, <code>CUDA_ROOT</code> typically resembles:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="fu">Sys.setenv</span>(</span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>    <span class="at">CUDA_ROOT =</span> <span class="fu">paste0</span>(</span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>        <span class="st">&quot;C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/&quot;</span>,</span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a>        <span class="st">&quot;v12.6&quot;</span></span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a>    )</span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a>)</span></code></pre></div>
+<p>Use a toolkit version supported by the installed NVIDIA driver.
+<code>CUDA_ROOT</code>, <code>CUDA_HOME</code>, and
+<code>CUDA_PATH</code> are accepted. The configuration searches
+<code>include</code>, <code>lib</code>, and <code>lib64</code> below
+that prefix as well as <code>targets/*/include</code>,
+<code>targets/*/lib</code>, and <code>targets/*/lib64</code>. It
+compiles and links a minimal program against CUDA Runtime, cuBLAS,
+cuSOLVER, and cuRAND; <code>nvcc</code> being present is not sufficient.
+The default CUDA host compiler is a system compiler under
+<code>/usr/bin</code>, ahead of CUDA and Conda wrappers. Set
+<code>FASTPLS_CUDA_HOST_CXX</code> to an absolute compatible system
+compiler only when the default is unsuitable.</p>
+</div>
+<div id="verify-the-installed-capabilities" class="section level2">
+<h2>Verify the installed capabilities</h2>
+<p>Restart R after installation, load fastPLS, and inspect the compiled
+CPU library and accelerator capabilities:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="fu">library</span>(fastPLS)</span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a><span class="fu">fastPLS_blas</span>()</span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a><span class="fu">cuda_info</span>()</span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a><span class="fu">has_cuda</span>()</span>
+<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a><span class="fu">has_metal</span>()</span>
+<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a><span class="fu">packageVersion</span>(<span class="st">&quot;fastPLS&quot;</span>)</span></code></pre></div>
+<p>The <code>backend</code> field is <code>&quot;Accelerate&quot;</code>,
+<code>&quot;OpenBLAS&quot;</code>, or <code>&quot;R BLAS/LAPACK&quot;</code>. For OpenBLAS
+builds, the report also contains the library version, full configuration
+string, selected CPU core, parallel runtime, active thread count, and
+resolved library path when available. Use
+<code>fastPLS_blas(details = FALSE)</code> when a script requires only
+the former scalar backend name.</p>
+<p>Publication benchmarks should verify three items before timing:</p>
+<ol style="list-style-type: decimal">
+<li>the shared or static library resolved during installation;</li>
+<li>the OpenBLAS version string;</li>
+<li>the runtime CPU core selected by OpenBLAS.</li>
+</ol>
+<p>The validation utility and campaign wrapper in <a href="https://github.com/tkcaccia/fastPLS-extra"><code>fastPLS-extra</code></a>
+enforce these checks. A timing run made with a different or unverified
+OpenBLAS build is a separate benchmark condition and should not be
+combined with verified results.</p>
+<p>Test the selected runtime backend with a small deterministic fit:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(iris[, <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>])</span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>y <span class="ot">&lt;-</span> iris<span class="sc">$</span>Species</span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">pls</span>(X, y, <span class="at">ncomp =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">backend =</span> <span class="st">&quot;cpu&quot;</span>, <span class="at">seed =</span> <span class="dv">11</span>)</span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a><span class="fu">stopifnot</span>(<span class="fu">length</span>(fit<span class="sc">$</span>Yfit) <span class="sc">==</span> <span class="dv">2</span><span class="dt">L</span>)</span>
+<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a></span>
+<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">has_cuda</span>()) {</span>
+<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a>    fit_cuda <span class="ot">&lt;-</span> <span class="fu">pls</span>(X, y, <span class="at">ncomp =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">backend =</span> <span class="st">&quot;cuda&quot;</span>, <span class="at">seed =</span> <span class="dv">11</span>)</span>
+<span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a>}</span>
+<span id="cb14-10"><a href="#cb14-10" tabindex="-1"></a></span>
+<span id="cb14-11"><a href="#cb14-11" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">has_metal</span>()) {</span>
+<span id="cb14-12"><a href="#cb14-12" tabindex="-1"></a>    fit_metal <span class="ot">&lt;-</span> <span class="fu">pls</span>(X, y, <span class="at">ncomp =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">backend =</span> <span class="st">&quot;metal&quot;</span>, <span class="at">seed =</span> <span class="dv">11</span>)</span>
+<span id="cb14-13"><a href="#cb14-13" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<div id="runtime-backend-and-cpu-core-selection" class="section level2">
+<h2>Runtime backend and CPU-core selection</h2>
+<p>Installation determines which backends exist. A function argument
+selects a backend for one operation, while session options establish
+defaults:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="fu">options</span>(<span class="at">backend =</span> <span class="st">&quot;cpu&quot;</span>, <span class="at">n.cores =</span> <span class="dv">4</span><span class="dt">L</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">pls</span>(X, y, <span class="at">ncomp =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>)</span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a>fit_one_core <span class="ot">&lt;-</span> <span class="fu">pls</span>(X, y, <span class="at">ncomp =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">n.cores =</span> <span class="dv">1</span><span class="dt">L</span>)</span></code></pre></div>
+<p>An explicit <code>backend</code> or <code>n.cores</code> argument
+overrides the corresponding option. The <code>FASTPLS_BACKEND</code>
+environment variable is consulted only when no explicit argument or
+<code>options(backend=...)</code> value is present. CPU remains the
+default.</p>
+</div>
+<div id="build-time-environment-variables" class="section level2">
+<h2>Build-time environment variables</h2>
+<table>
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Variable</th>
+<th align="left">Values</th>
+<th align="left">Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><code>FASTPLS_USE_OPENBLAS</code></td>
+<td align="left"><code>auto</code>, <code>0</code>, <code>1</code></td>
+<td align="left">OpenBLAS policy.</td>
+</tr>
+<tr class="even">
+<td align="left"><code>OPENBLAS_ROOT</code></td>
+<td align="left">directory</td>
+<td align="left">OpenBLAS installation prefix.</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>FASTPLS_USE_CUDA</code></td>
+<td align="left"><code>auto</code>, <code>0</code>, <code>1</code></td>
+<td align="left">Detect, disable, or request CUDA.</td>
+</tr>
+<tr class="even">
+<td align="left"><code>FASTPLS_REQUIRE_CUDA</code></td>
+<td align="left"><code>0</code>, <code>1</code></td>
+<td align="left">Require a successful CUDA compile/link probe.</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>FASTPLS_CUDA_DIAGNOSTIC_ONLY</code></td>
+<td align="left"><code>0</code>, <code>1</code></td>
+<td align="left">Build an explicitly labelled nonfunctional CUDA
+diagnostic package.</td>
+</tr>
+<tr class="even">
+<td align="left"><code>FASTPLS_CUDA_HOST_CXX</code></td>
+<td align="left">file</td>
+<td align="left">Absolute system host compiler for
+<code>nvcc</code>.</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>CUDA_ROOT</code>, <code>CUDA_HOME</code>,
+<code>CUDA_PATH</code></td>
+<td align="left">directory</td>
+<td align="left">CUDA Toolkit prefix.</td>
+</tr>
+<tr class="even">
+<td align="left"><code>FASTPLS_USE_METAL</code></td>
+<td align="left"><code>auto</code>, <code>0</code>, <code>1</code></td>
+<td align="left">Metal policy.</td>
+</tr>
+</tbody>
+</table>
+<p>Set these variables before installing the package. Changing them
+afterward does not add a backend to an already compiled package.</p>
+</div>
+<div id="troubleshooting" class="section level2">
+<h2>Troubleshooting</h2>
+<div id="the-package-is-already-in-use" class="section level3">
+<h3>The package is already in use</h3>
+<p>Windows cannot replace a loaded DLL. Restart R without loading
+fastPLS, then reinstall it.</p>
+</div>
+<div id="an-x64-library-is-linked-into-an-arm64-build" class="section level3">
+<h3>An x64 library is linked into an ARM64 build</h3>
+<p>Remove stale <code>OPENBLAS_ROOT</code>, <code>R_TOOLS_SOFT</code>,
+and CUDA settings, restart R, and install again. The configuration
+output should report <code>target architecture aarch64</code> and must
+not name an x86-64 OpenBLAS archive.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="fu">Sys.unsetenv</span>(<span class="fu">c</span>(</span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a>    <span class="st">&quot;OPENBLAS_ROOT&quot;</span>,</span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a>    <span class="st">&quot;R_TOOLS_SOFT&quot;</span>,</span>
+<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a>    <span class="st">&quot;CUDA_ROOT&quot;</span>,</span>
+<span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a>    <span class="st">&quot;CUDA_PATH&quot;</span></span>
+<span id="cb16-6"><a href="#cb16-6" tabindex="-1"></a>))</span></code></pre></div>
+</div>
+<div id="cuda-or-metal-is-unavailable-after-installation" class="section level3">
+<h3>CUDA or Metal is unavailable after installation</h3>
+<p><code>cuda_info()</code>, <code>has_cuda()</code>, and
+<code>has_metal()</code> describe the installed package and current
+hardware. <code>cuda_info()</code> distinguishes a CUDA-enabled build
+with a visible device, a build without CUDA, and an explicit
+diagnostic-only build. Install a compatible toolkit without changing a
+working host driver, then rebuild from source. Use
+<code>FASTPLS_REQUIRE_CUDA=1</code> or <code>FASTPLS_USE_METAL=1</code>
+when an unavailable accelerator should stop installation rather than
+produce a CPU-capable build.</p>
+<p>If configuration reports missing CUDA libraries, confirm that CUDA
+Runtime, cuBLAS, cuSOLVER, and cuRAND are in one discovered toolkit
+library directory. If it reports an unsupported host compiler, point
+<code>FASTPLS_CUDA_HOST_CXX</code> to a system compiler supported by
+that toolkit. A runtime error after a successful build usually indicates
+that the host driver is too old for the toolkit runtime or that the
+container was started without NVIDIA GPU passthrough.</p>
+</div>
+<div id="the-vignette-is-not-found-after-a-github-installation" class="section level3">
+<h3>The vignette is not found after a GitHub installation</h3>
+<p>GitHub source installations may omit built vignettes unless
+requested. Install with <code>build_vignettes=TRUE</code>, then use:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a><span class="fu">vignette</span>(<span class="st">&quot;installation&quot;</span>, <span class="at">package =</span> <span class="st">&quot;fastPLS&quot;</span>)</span>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a><span class="fu">vignette</span>(<span class="st">&quot;fastPLS&quot;</span>, <span class="at">package =</span> <span class="st">&quot;fastPLS&quot;</span>)</span></code></pre></div>
+</div>
+<div id="record-a-reproducible-installation" class="section level3">
+<h3>Record a reproducible installation</h3>
+<p>Retain the package installation output and record the resulting
+environment:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="fu">fastPLS_blas</span>()</span>
+<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a><span class="fu">cuda_info</span>()</span>
+<span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a><span class="fu">has_cuda</span>()</span>
+<span id="cb18-4"><a href="#cb18-4" tabindex="-1"></a><span class="fu">has_metal</span>()</span></code></pre></div>
+<p>For benchmark reports, retain the output of
+<code>fastPLS_blas()</code> and also record compiler versions, the
+resolved OpenBLAS library, OpenBLAS release and selected CPU core (or
+the Accelerate version), CUDA toolkit and driver versions, requested CPU
+thread count, operating system, and CPU/GPU hardware.</p>
+</div>
+</div>
+<div id="session-information" class="section level2">
+<h2>Session information</h2>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span>
+<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a><span class="co">#&gt; R version 4.6.0 (2026-04-24)</span></span>
+<span id="cb19-3"><a href="#cb19-3" tabindex="-1"></a><span class="co">#&gt; Platform: aarch64-apple-darwin23</span></span>
+<span id="cb19-4"><a href="#cb19-4" tabindex="-1"></a><span class="co">#&gt; Running under: macOS Sonoma 14.5</span></span>
+<span id="cb19-5"><a href="#cb19-5" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb19-6"><a href="#cb19-6" tabindex="-1"></a><span class="co">#&gt; Matrix products: default</span></span>
+<span id="cb19-7"><a href="#cb19-7" tabindex="-1"></a><span class="co">#&gt; BLAS:   /Library/Frameworks/R.framework/Versions/4.6/Resources/lib/libRblas.0.dylib </span></span>
+<span id="cb19-8"><a href="#cb19-8" tabindex="-1"></a><span class="co">#&gt; LAPACK: /Library/Frameworks/R.framework/Versions/4.6/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.1</span></span>
+<span id="cb19-9"><a href="#cb19-9" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb19-10"><a href="#cb19-10" tabindex="-1"></a><span class="co">#&gt; locale:</span></span>
+<span id="cb19-11"><a href="#cb19-11" tabindex="-1"></a><span class="co">#&gt; [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8</span></span>
+<span id="cb19-12"><a href="#cb19-12" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb19-13"><a href="#cb19-13" tabindex="-1"></a><span class="co">#&gt; time zone: Africa/Johannesburg</span></span>
+<span id="cb19-14"><a href="#cb19-14" tabindex="-1"></a><span class="co">#&gt; tzcode source: internal</span></span>
+<span id="cb19-15"><a href="#cb19-15" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb19-16"><a href="#cb19-16" tabindex="-1"></a><span class="co">#&gt; attached base packages:</span></span>
+<span id="cb19-17"><a href="#cb19-17" tabindex="-1"></a><span class="co">#&gt; [1] stats     graphics  grDevices utils     datasets  methods  </span></span>
+<span id="cb19-18"><a href="#cb19-18" tabindex="-1"></a><span class="co">#&gt; [7] base     </span></span>
+<span id="cb19-19"><a href="#cb19-19" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb19-20"><a href="#cb19-20" tabindex="-1"></a><span class="co">#&gt; other attached packages:</span></span>
+<span id="cb19-21"><a href="#cb19-21" tabindex="-1"></a><span class="co">#&gt; [1] fastPLS_0.3</span></span>
+<span id="cb19-22"><a href="#cb19-22" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb19-23"><a href="#cb19-23" tabindex="-1"></a><span class="co">#&gt; loaded via a namespace (and not attached):</span></span>
+<span id="cb19-24"><a href="#cb19-24" tabindex="-1"></a><span class="co">#&gt;  [1] digest_0.6.39   R6_2.6.1        fastmap_1.2.0   xfun_0.60      </span></span>
+<span id="cb19-25"><a href="#cb19-25" tabindex="-1"></a><span class="co">#&gt;  [5] float_0.3-3     cachem_1.1.0    knitr_1.51      htmltools_0.5.9</span></span>
+<span id="cb19-26"><a href="#cb19-26" tabindex="-1"></a><span class="co">#&gt;  [9] rmarkdown_2.31  lifecycle_1.0.5 cli_3.6.6       sass_0.4.10    </span></span>
+<span id="cb19-27"><a href="#cb19-27" tabindex="-1"></a><span class="co">#&gt; [13] jquerylib_0.1.4 compiler_4.6.0  tools_4.6.0     evaluate_1.0.5 </span></span>
+<span id="cb19-28"><a href="#cb19-28" tabindex="-1"></a><span class="co">#&gt; [17] bslib_0.12.0    yaml_2.3.12     otel_0.2.0      rlang_1.3.0    </span></span>
+<span id="cb19-29"><a href="#cb19-29" tabindex="-1"></a><span class="co">#&gt; [21] jsonlite_2.0.0</span></span></code></pre></div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,308 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2026 Stefano Cacciatore
+
+#ifndef FASTPLS_R_API_H
+#define FASTPLS_R_API_H
+
+#ifndef R_NO_REMAP
+#define R_NO_REMAP
+#endif
+#include <Rinternals.h>
+
+extern "C" {
+SEXP _fastPLS_cuda_resident_project_cpp(SEXP object, SEXP predictors,
+                                        SEXP components);
+SEXP _fastPLS_cuda_resident_response_sums_cpp(SEXP object, SEXP predictors,
+                                              SEXP response, SEXP labels,
+                                              SEXP components);
+SEXP _fastPLS_cuda_resident_simpls_fit_cpp(
+  SEXP predictors, SEXP response, SEXP labels, SEXP classes, SEXP precision,
+  SEXP components, SEXP scaling, SEXP oversample, SEXP power, SEXP seed,
+  SEXP retain_scores, SEXP method, SEXP north, SEXP kernel, SEXP gamma,
+  SEXP degree, SEXP coefficient
+);
+SEXP _fastPLS_cuda_resident_simpls_cv_classification_cpp(
+  SEXP predictors, SEXP labels, SEXP class_count, SEXP folds,
+  SEXP components, SEXP scaling, SEXP classifier, SEXP oversample,
+  SEXP power, SEXP seed, SEXP store_predictions, SEXP store_scores,
+  SEXP method, SEXP north
+);
+SEXP _fastPLS_cuda_resident_simpls_cv_regression_cpp(
+  SEXP predictors, SEXP responses, SEXP folds, SEXP components,
+  SEXP scaling, SEXP metric, SEXP oversample, SEXP power, SEXP seed,
+  SEXP store_predictions, SEXP method, SEXP north
+);
+SEXP _fastPLS_cuda_resident_export_cpp(SEXP object, SEXP loadings,
+                                       SEXP variance, SEXP scores);
+SEXP _fastPLS_cuda_resident_compact_cpp(SEXP object, SEXP prepare_lda);
+SEXP _fastPLS_cuda_resident_classify_path_cpp(
+  SEXP object, SEXP predictors, SEXP components, SEXP classifier, SEXP top
+);
+SEXP _fastPLS_cuda_resident_classify_response_path_cpp(
+  SEXP object, SEXP predictors, SEXP components, SEXP classifier, SEXP top
+);
+SEXP _fastPLS_cuda_resident_predict_path_cpp(
+  SEXP object, SEXP predictors, SEXP components, SEXP classifier
+);
+SEXP _fastPLS_cuda_matrix_multiply(SEXP left, SEXP right);
+SEXP _fastPLS_has_cuda();
+SEXP _fastPLS_cuda_info_cpp();
+SEXP _fastPLS_has_metal();
+SEXP _fastPLS_blas_backend_cpp();
+SEXP _fastPLS_blas_info_cpp();
+SEXP _fastPLS_simpls_cache_predictor_crossprod(
+  SEXP samples, SEXP predictors, SEXP components
+);
+SEXP _fastPLS_set_cpu_threads(SEXP threads);
+SEXP _fastPLS_rsvd_audit_reset_debug();
+SEXP _fastPLS_rsvd_audit_summary_debug();
+SEXP _fastPLS_fastsvd_core_cpp(SEXP matrix, SEXP components,
+                               SEXP oversample, SEXP power, SEXP seed,
+                               SEXP left_only);
+SEXP _fastPLS_fastsvd_float32_core_cpp(SEXP matrix, SEXP components,
+                                       SEXP oversample, SEXP power,
+                                       SEXP seed, SEXP left_only);
+SEXP _fastPLS_cv_folds_core_cpp(SEXP groups, SEXP labels,
+                                SEXP class_count, SEXP folds);
+SEXP _fastPLS_pls_double_cv_core_cpp(
+  SEXP predictors, SEXP response, SEXP class_count, SEXP outer_folds,
+  SEXP inner_folds, SEXP components, SEXP scaling, SEXP method,
+  SEXP classifier_metric, SEXP selection_metric, SEXP north, SEXP kernel,
+  SEXP gamma, SEXP degree, SEXP offset, SEXP oversample, SEXP power,
+  SEXP seed, SEXP backend, SEXP classification
+);
+SEXP _fastPLS_pls_cv_classification_core_cpp(
+  SEXP predictors, SEXP labels, SEXP class_count, SEXP folds,
+  SEXP components, SEXP scaling, SEXP method, SEXP classifier,
+  SEXP oversample, SEXP power, SEXP seed, SEXP store_predictions,
+  SEXP store_scores
+);
+SEXP _fastPLS_pls_cv_classification_float32_core_cpp(
+  SEXP predictors, SEXP labels, SEXP class_count, SEXP folds,
+  SEXP components, SEXP scaling, SEXP method, SEXP classifier,
+  SEXP oversample, SEXP power, SEXP seed, SEXP store_predictions,
+  SEXP store_scores
+);
+SEXP _fastPLS_pls_cv_classification_float32_metal_core_cpp(
+  SEXP predictors, SEXP labels, SEXP class_count, SEXP folds,
+  SEXP components, SEXP scaling, SEXP method, SEXP classifier,
+  SEXP north, SEXP kernel, SEXP gamma, SEXP degree, SEXP offset,
+  SEXP oversample, SEXP power, SEXP seed, SEXP store_predictions,
+  SEXP store_scores
+);
+SEXP _fastPLS_pls_cv_opls_classification_core_cpp(
+  SEXP predictors, SEXP labels, SEXP class_count, SEXP folds,
+  SEXP components, SEXP scaling, SEXP classifier, SEXP north,
+  SEXP oversample, SEXP power, SEXP seed, SEXP store_predictions,
+  SEXP store_scores
+);
+SEXP _fastPLS_pls_cv_opls_classification_float32_core_cpp(
+  SEXP predictors, SEXP labels, SEXP class_count, SEXP folds,
+  SEXP components, SEXP scaling, SEXP classifier, SEXP north,
+  SEXP oversample, SEXP power, SEXP seed, SEXP store_predictions,
+  SEXP store_scores
+);
+SEXP _fastPLS_pls_cv_opls_classification_float32_cuda_core_cpp(
+  SEXP predictors, SEXP labels, SEXP class_count, SEXP folds,
+  SEXP components, SEXP scaling, SEXP classifier, SEXP north,
+  SEXP oversample, SEXP power, SEXP seed, SEXP store_predictions,
+  SEXP store_scores
+);
+SEXP _fastPLS_pls_cv_kernel_classification_core_cpp(
+  SEXP predictors, SEXP labels, SEXP class_count, SEXP folds,
+  SEXP components, SEXP scaling, SEXP classifier, SEXP kernel,
+  SEXP gamma, SEXP degree, SEXP offset, SEXP oversample, SEXP power,
+  SEXP seed, SEXP store_predictions, SEXP store_scores
+);
+SEXP _fastPLS_pls_cv_kernel_classification_float32_core_cpp(
+  SEXP predictors, SEXP labels, SEXP class_count, SEXP folds,
+  SEXP components, SEXP scaling, SEXP classifier, SEXP kernel,
+  SEXP gamma, SEXP degree, SEXP offset, SEXP oversample, SEXP power,
+  SEXP seed, SEXP store_predictions, SEXP store_scores
+);
+SEXP _fastPLS_pls_cv_regression_core_cpp(
+  SEXP predictors, SEXP responses, SEXP folds, SEXP components,
+  SEXP scaling, SEXP method, SEXP metric, SEXP oversample, SEXP power,
+  SEXP seed, SEXP store_predictions
+);
+SEXP _fastPLS_pls_cv_regression_float32_core_cpp(
+  SEXP predictors, SEXP responses, SEXP folds, SEXP components,
+  SEXP scaling, SEXP method, SEXP metric, SEXP oversample, SEXP power,
+  SEXP seed, SEXP store_predictions
+);
+SEXP _fastPLS_pls_cv_regression_float32_metal_core_cpp(
+  SEXP predictors, SEXP responses, SEXP folds, SEXP components,
+  SEXP scaling, SEXP method, SEXP metric, SEXP north, SEXP kernel,
+  SEXP gamma, SEXP degree, SEXP offset, SEXP oversample, SEXP power,
+  SEXP seed, SEXP store_predictions
+);
+SEXP _fastPLS_pls_cv_opls_regression_core_cpp(
+  SEXP predictors, SEXP responses, SEXP folds, SEXP components,
+  SEXP scaling, SEXP metric, SEXP north, SEXP oversample, SEXP power,
+  SEXP seed, SEXP store_predictions
+);
+SEXP _fastPLS_pls_cv_opls_regression_float32_core_cpp(
+  SEXP predictors, SEXP responses, SEXP folds, SEXP components,
+  SEXP scaling, SEXP metric, SEXP north, SEXP oversample, SEXP power,
+  SEXP seed, SEXP store_predictions
+);
+SEXP _fastPLS_pls_cv_opls_regression_float32_cuda_core_cpp(
+  SEXP predictors, SEXP responses, SEXP folds, SEXP components,
+  SEXP scaling, SEXP metric, SEXP north, SEXP oversample, SEXP power,
+  SEXP seed, SEXP store_predictions
+);
+SEXP _fastPLS_pls_cv_kernel_regression_core_cpp(
+  SEXP predictors, SEXP responses, SEXP folds, SEXP components,
+  SEXP scaling, SEXP metric, SEXP kernel, SEXP gamma, SEXP degree,
+  SEXP offset, SEXP oversample, SEXP power, SEXP seed,
+  SEXP store_predictions
+);
+SEXP _fastPLS_pls_cv_kernel_regression_float32_core_cpp(
+  SEXP predictors, SEXP responses, SEXP folds, SEXP components,
+  SEXP scaling, SEXP metric, SEXP kernel, SEXP gamma, SEXP degree,
+  SEXP offset, SEXP oversample, SEXP power, SEXP seed,
+  SEXP store_predictions
+);
+SEXP _fastPLS_lda_train_prefix_cpp(SEXP scores, SEXP labels,
+                                    SEXP class_count, SEXP components,
+                                    SEXP ridge);
+SEXP _fastPLS_lda_train_moments_prefix_cpp(
+  SEXP gram, SEXP class_sums, SEXP counts, SEXP sample_count,
+  SEXP components
+);
+SEXP _fastPLS_lda_project_train_prefix_cpp(
+  SEXP predictors, SEXP projection, SEXP offset, SEXP labels,
+  SEXP class_count, SEXP components, SEXP ridge
+);
+SEXP _fastPLS_lda_predict_cpp(SEXP scores, SEXP model);
+SEXP _fastPLS_lda_predict_labels_cpp(SEXP scores, SEXP model);
+SEXP _fastPLS_lda_project_predict_labels_cpp(
+  SEXP predictors, SEXP projection, SEXP offset, SEXP model
+);
+SEXP _fastPLS_spearman_correlation_cpp(SEXP observed, SEXP predicted);
+SEXP _fastPLS_evaluate_regression_core_cpp(
+  SEXP observed, SEXP predicted, SEXP training, SEXP relative_epsilon,
+  SEXP na_rm
+);
+SEXP _fastPLS_evaluate_regression_by_column_cpp(
+  SEXP observed, SEXP predicted, SEXP training, SEXP relative_epsilon,
+  SEXP na_rm
+);
+SEXP _fastPLS_evaluate_classification_core_cpp(
+  SEXP observed, SEXP predicted, SEXP class_count, SEXP scores,
+  SEXP score_observed, SEXP top_k
+);
+SEXP _fastPLS_evaluate_ranked_accuracy_cpp(SEXP observed, SEXP ranked);
+SEXP _fastPLS_evaluate_is_onehot_cpp(SEXP values);
+SEXP _fastPLS_evaluate_class_labels_cpp(SEXP values, SEXP reference_levels);
+SEXP _fastPLS_vip_core_cpp(SEXP model);
+SEXP _fastPLS_fastcor_core_cpp(SEXP left, SEXP right, SEXP by_row,
+                               SEXP diagonal);
+SEXP _fastPLS_float32_argmax_cpp(SEXP scores);
+SEXP _fastPLS_float32_topk_cpp(SEXP scores, SEXP top);
+SEXP _fastPLS_double_topk_cpp(SEXP scores, SEXP top);
+SEXP _fastPLS_float32_sweep_cols_cpp(SEXP matrix, SEXP statistics,
+                                     SEXP operation);
+SEXP _fastPLS_float32_standardize_cpp(SEXP matrix, SEXP center, SEXP scale);
+SEXP _fastPLS_cpu_float32_matrix_multiply_cpp(
+  SEXP left, SEXP right, SEXP transpose_left, SEXP transpose_right
+);
+SEXP _fastPLS_metal_float32_matrix_multiply_cpp(
+  SEXP left, SEXP right, SEXP transpose_left, SEXP transpose_right
+);
+SEXP _fastPLS_kernel_matrix_float32_cpp(
+  SEXP left, SEXP right, SEXP kernel, SEXP gamma, SEXP degree,
+  SEXP offset, SEXP backend
+);
+SEXP _fastPLS_opls_apply_filter_float32_cpp(
+  SEXP matrix, SEXP center, SEXP scale, SEXP weights, SEXP loadings,
+  SEXP backend
+);
+SEXP _fastPLS_opls_apply_filter_cpp(
+  SEXP matrix, SEXP center, SEXP scale, SEXP weights, SEXP loadings
+);
+SEXP _fastPLS_opls_filter_core_cpp(
+  SEXP predictors, SEXP responses, SEXP north, SEXP scaling
+);
+SEXP _fastPLS_opls_filter_rsvd_core_cpp(
+  SEXP predictors, SEXP responses, SEXP north, SEXP scaling,
+  SEXP oversample, SEXP power, SEXP seed
+);
+SEXP _fastPLS_opls_filter_labels_core_cpp(
+  SEXP predictors, SEXP labels, SEXP class_count, SEXP north, SEXP scaling
+);
+SEXP _fastPLS_opls_filter_float32_core_cpp(
+  SEXP predictors, SEXP responses, SEXP north, SEXP scaling,
+  SEXP oversample, SEXP power, SEXP seed
+);
+SEXP _fastPLS_opls_filter_float32_labels_core_cpp(
+  SEXP predictors, SEXP labels, SEXP class_count, SEXP north, SEXP scaling
+);
+SEXP _fastPLS_opls_filter_float32_backend_core_cpp(
+  SEXP predictors, SEXP responses, SEXP north, SEXP scaling, SEXP backend,
+  SEXP oversample, SEXP power, SEXP seed
+);
+SEXP _fastPLS_opls_filter_float32_labels_backend_core_cpp(
+  SEXP predictors, SEXP labels, SEXP class_count, SEXP north, SEXP scaling,
+  SEXP backend, SEXP oversample, SEXP power, SEXP seed
+);
+SEXP _fastPLS_lda_train_prefix_float32_cpp(SEXP scores, SEXP labels,
+                                            SEXP class_count,
+                                            SEXP components);
+SEXP _fastPLS_lda_predict_float32_cpp(SEXP scores, SEXP model,
+                                      SEXP return_scores);
+SEXP _fastPLS_center_kernel_train_float32_cpp(SEXP kernel);
+SEXP _fastPLS_center_kernel_test_float32_cpp(SEXP kernel,
+                                             SEXP training_means,
+                                             SEXP training_grand_mean);
+SEXP _fastPLS_kernel_matrix_cpp(SEXP left, SEXP right, SEXP kernel,
+                                SEXP gamma, SEXP degree, SEXP offset);
+SEXP _fastPLS_center_kernel_train_cpp(SEXP kernel);
+SEXP _fastPLS_center_kernel_test_cpp(SEXP kernel, SEXP training_means,
+                                     SEXP training_grand_mean);
+SEXP _fastPLS_pls_labels_core_cpp(
+  SEXP predictors, SEXP labels, SEXP class_count, SEXP components,
+  SEXP scaling, SEXP fit, SEXP store_scores, SEXP oversample, SEXP power,
+  SEXP seed
+);
+SEXP _fastPLS_pls_simpls_labels_core_cpp(
+  SEXP predictors, SEXP labels, SEXP class_count, SEXP components,
+  SEXP scaling, SEXP fit, SEXP store_scores, SEXP oversample, SEXP power,
+  SEXP seed
+);
+SEXP _fastPLS_pls_matrix_core_cpp(
+  SEXP predictors, SEXP responses, SEXP components, SEXP scaling,
+  SEXP fit, SEXP store_scores, SEXP method, SEXP oversample, SEXP power,
+  SEXP seed
+);
+SEXP _fastPLS_pls_matrix_core_xprod_cpp(
+  SEXP predictors, SEXP responses, SEXP components, SEXP scaling,
+  SEXP fit, SEXP store_scores, SEXP method, SEXP oversample, SEXP power,
+  SEXP seed
+);
+SEXP _fastPLS_pls_float32_matrix_backend_core_cpp(
+  SEXP predictors, SEXP responses, SEXP components, SEXP scaling,
+  SEXP fit, SEXP store_scores, SEXP method, SEXP oversample, SEXP power,
+  SEXP seed, SEXP backend
+);
+SEXP _fastPLS_pls_labels_core_predict_cpp(
+  SEXP model, SEXP predictors, SEXP project
+);
+SEXP _fastPLS_pls_class_predict_topk_core_cpp(
+  SEXP model, SEXP predictors, SEXP top, SEXP project, SEXP block_size
+);
+SEXP _fastPLS_pls_float32_class_predict_compact_cpp(
+  SEXP model, SEXP predictors, SEXP use_lda, SEXP block_size
+);
+SEXP _fastPLS_lda_project_train_prefix_float32_cpp(
+  SEXP model, SEXP predictors, SEXP labels, SEXP class_count,
+  SEXP components
+);
+SEXP _fastPLS_pls_float32_labels_backend_core_cpp(
+  SEXP predictors, SEXP labels, SEXP class_count, SEXP components,
+  SEXP scaling, SEXP fit, SEXP store_scores, SEXP method, SEXP oversample,
+  SEXP power, SEXP seed, SEXP backend, SEXP store_score_moments
+);
+}
+
+#endif
