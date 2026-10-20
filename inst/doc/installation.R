@@ -67,9 +67,11 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 # library(fastPLS)
 # 
 # fastPLS_blas()
-# cuda_info()
-# has_cuda()
-# has_metal()
+# fastPLS::cuda_info()
+# gpuinfo::has_cuda()
+# gpuinfo::has_metal()
+# gpuinfo::cpu_info()
+# gpuinfo::system_memory_info()
 # packageVersion("fastPLS")
 
 ## ----verify-fit, eval = FALSE-------------------------------------
@@ -79,11 +81,11 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 # fit <- pls(X, y, ncomp = 1:2, backend = "cpu", seed = 11)
 # stopifnot(length(fit$Yfit) == 2L)
 # 
-# if (has_cuda()) {
+# if (fastPLS::cuda_info()$available) {
 #     fit_cuda <- pls(X, y, ncomp = 1:2, backend = "cuda", seed = 11)
 # }
 # 
-# if (has_metal()) {
+# if (gpuinfo::has_metal()) {
 #     fit_metal <- pls(X, y, ncomp = 1:2, backend = "metal", seed = 11)
 # }
 
@@ -107,9 +109,10 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 
 ## ----reproducibility, eval = FALSE--------------------------------
 # fastPLS_blas()
-# cuda_info()
-# has_cuda()
-# has_metal()
+# fastPLS::cuda_info()
+# gpuinfo::has_cuda()
+# gpuinfo::has_metal()
+# gpuinfo::hardware_manifest(memory = "none")
 
 ## ----session-information------------------------------------------
 sessionInfo()

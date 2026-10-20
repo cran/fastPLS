@@ -513,8 +513,9 @@ optional accelerators:</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">library</span>(fastPLS)</span>
 <span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a></span>
 <span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="fu">fastPLS_blas</span>()</span>
-<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="fu">has_cuda</span>()</span>
-<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a><span class="fu">has_metal</span>()</span></code></pre></div>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>fastPLS<span class="sc">::</span><span class="fu">cuda_info</span>()</span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>gpuinfo<span class="sc">::</span><span class="fu">has_cuda</span>()</span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>gpuinfo<span class="sc">::</span><span class="fu">has_metal</span>()</span></code></pre></div>
 <p><code>fastPLS_blas()</code> reports the backend together with the
 OpenBLAS version, configuration, selected CPU core, parallel runtime,
 active thread count, and resolved library path when available. Linux and
@@ -720,12 +721,16 @@ models.</td>
 core.</td>
 </tr>
 <tr class="even">
-<td><code>has_cuda()</code></td>
-<td>Check whether CUDA-native fastPLS support is available.</td>
+<td><code>fastPLS::cuda_info()</code></td>
+<td>Report fastPLS CUDA capability and library diagnostics.</td>
 </tr>
 <tr class="odd">
-<td><code>has_metal()</code></td>
-<td>Check for Apple Metal support.</td>
+<td><code>gpuinfo::has_cuda()</code></td>
+<td>Check whether CUDA-capable hardware appears usable.</td>
+</tr>
+<tr class="even">
+<td><code>gpuinfo::has_metal()</code></td>
+<td>Check whether Metal-capable hardware appears usable.</td>
 </tr>
 </tbody>
 </table>
@@ -2295,16 +2300,78 @@ device-native for every matrix shape.</p>
 </div>
 <div id="cuda-and-metal-availability" class="section level2">
 <h2>CUDA and Metal Availability</h2>
-<p>CUDA and Apple Metal are optional. Use <code>has_cuda()</code> before
-selecting <code>backend = &quot;cuda&quot;</code> and <code>has_metal()</code>
-before selecting <code>backend = &quot;metal&quot;</code>. An unavailable
-accelerator request stops with an informative error and is not
-redirected to CPU.</p>
-<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" tabindex="-1"></a><span class="fu">has_cuda</span>()</span>
-<span id="cb49-2"><a href="#cb49-2" tabindex="-1"></a><span class="co">#&gt; [1] FALSE</span></span>
-<span id="cb49-3"><a href="#cb49-3" tabindex="-1"></a><span class="fu">has_metal</span>()</span>
-<span id="cb49-4"><a href="#cb49-4" tabindex="-1"></a><span class="co">#&gt; [1] FALSE</span></span></code></pre></div>
-<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">has_cuda</span>()) {</span>
+<p>CUDA and Apple Metal are optional. The <code>gpuinfo</code> package
+reports hardware and driver availability;
+<code>fastPLS::cuda_info()</code> reports whether the installed fastPLS
+binary contains CUDA code and can see a device through its own runtime.
+It also includes gpuinfo’s independent driver result and CUDA
+shared-library inventory, with the libraries required by fastPLS marked
+explicitly. cuFFT and NCCL are optional. Use the qualified name because
+gpuinfo also exports <code>cuda_info()</code>. An unavailable
+accelerator request stops with an informative error. Fitting and
+prediction use native backend checks without repeating hardware
+discovery. CPU resources, system memory, and benchmark environment
+records are available through <code>gpuinfo::cpu_info()</code>,
+<code>gpuinfo::system_memory_info()</code>, and
+<code>gpuinfo::hardware_manifest()</code>.</p>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" tabindex="-1"></a>fastPLS<span class="sc">::</span><span class="fu">cuda_info</span>()</span>
+<span id="cb49-2"><a href="#cb49-2" tabindex="-1"></a><span class="co">#&gt; $status</span></span>
+<span id="cb49-3"><a href="#cb49-3" tabindex="-1"></a><span class="co">#&gt; [1] &quot;unavailable&quot;</span></span>
+<span id="cb49-4"><a href="#cb49-4" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb49-5"><a href="#cb49-5" tabindex="-1"></a><span class="co">#&gt; $compiled</span></span>
+<span id="cb49-6"><a href="#cb49-6" tabindex="-1"></a><span class="co">#&gt; [1] FALSE</span></span>
+<span id="cb49-7"><a href="#cb49-7" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb49-8"><a href="#cb49-8" tabindex="-1"></a><span class="co">#&gt; $available</span></span>
+<span id="cb49-9"><a href="#cb49-9" tabindex="-1"></a><span class="co">#&gt; [1] FALSE</span></span>
+<span id="cb49-10"><a href="#cb49-10" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb49-11"><a href="#cb49-11" tabindex="-1"></a><span class="co">#&gt; $diagnostic_only</span></span>
+<span id="cb49-12"><a href="#cb49-12" tabindex="-1"></a><span class="co">#&gt; [1] FALSE</span></span>
+<span id="cb49-13"><a href="#cb49-13" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb49-14"><a href="#cb49-14" tabindex="-1"></a><span class="co">#&gt; $device_count</span></span>
+<span id="cb49-15"><a href="#cb49-15" tabindex="-1"></a><span class="co">#&gt; [1] 0</span></span>
+<span id="cb49-16"><a href="#cb49-16" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb49-17"><a href="#cb49-17" tabindex="-1"></a><span class="co">#&gt; $runtime_version</span></span>
+<span id="cb49-18"><a href="#cb49-18" tabindex="-1"></a><span class="co">#&gt; [1] NA</span></span>
+<span id="cb49-19"><a href="#cb49-19" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb49-20"><a href="#cb49-20" tabindex="-1"></a><span class="co">#&gt; $driver_version</span></span>
+<span id="cb49-21"><a href="#cb49-21" tabindex="-1"></a><span class="co">#&gt; [1] NA</span></span>
+<span id="cb49-22"><a href="#cb49-22" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb49-23"><a href="#cb49-23" tabindex="-1"></a><span class="co">#&gt; $no_cpu_fallback</span></span>
+<span id="cb49-24"><a href="#cb49-24" tabindex="-1"></a><span class="co">#&gt; [1] TRUE</span></span>
+<span id="cb49-25"><a href="#cb49-25" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb49-26"><a href="#cb49-26" tabindex="-1"></a><span class="co">#&gt; $hardware_available</span></span>
+<span id="cb49-27"><a href="#cb49-27" tabindex="-1"></a><span class="co">#&gt; [1] FALSE</span></span>
+<span id="cb49-28"><a href="#cb49-28" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb49-29"><a href="#cb49-29" tabindex="-1"></a><span class="co">#&gt; $libraries</span></span>
+<span id="cb49-30"><a href="#cb49-30" tabindex="-1"></a><span class="co">#&gt;   component      library                               purpose</span></span>
+<span id="cb49-31"><a href="#cb49-31" tabindex="-1"></a><span class="co">#&gt; 1    driver  CUDA driver  CUDA device discovery and driver API</span></span>
+<span id="cb49-32"><a href="#cb49-32" tabindex="-1"></a><span class="co">#&gt; 2   runtime CUDA runtime CUDA runtime API and kernel execution</span></span>
+<span id="cb49-33"><a href="#cb49-33" tabindex="-1"></a><span class="co">#&gt; 3    cublas       cuBLAS                  dense linear algebra</span></span>
+<span id="cb49-34"><a href="#cb49-34" tabindex="-1"></a><span class="co">#&gt; 4     cufft        cuFFT               fast Fourier transforms</span></span>
+<span id="cb49-35"><a href="#cb49-35" tabindex="-1"></a><span class="co">#&gt; 5  cusolver     cuSOLVER       dense and sparse direct solvers</span></span>
+<span id="cb49-36"><a href="#cb49-36" tabindex="-1"></a><span class="co">#&gt; 6    curand       cuRAND              random-number generation</span></span>
+<span id="cb49-37"><a href="#cb49-37" tabindex="-1"></a><span class="co">#&gt; 7      nccl         NCCL    multi-GPU collective communication</span></span>
+<span id="cb49-38"><a href="#cb49-38" tabindex="-1"></a><span class="co">#&gt;   loadable library_path version required_for_has_cuda      status</span></span>
+<span id="cb49-39"><a href="#cb49-39" tabindex="-1"></a><span class="co">#&gt; 1    FALSE         &lt;NA&gt;    &lt;NA&gt;                  TRUE unavailable</span></span>
+<span id="cb49-40"><a href="#cb49-40" tabindex="-1"></a><span class="co">#&gt; 2    FALSE         &lt;NA&gt;    &lt;NA&gt;                 FALSE unavailable</span></span>
+<span id="cb49-41"><a href="#cb49-41" tabindex="-1"></a><span class="co">#&gt; 3    FALSE         &lt;NA&gt;    &lt;NA&gt;                 FALSE unavailable</span></span>
+<span id="cb49-42"><a href="#cb49-42" tabindex="-1"></a><span class="co">#&gt; 4    FALSE         &lt;NA&gt;    &lt;NA&gt;                 FALSE unavailable</span></span>
+<span id="cb49-43"><a href="#cb49-43" tabindex="-1"></a><span class="co">#&gt; 5    FALSE         &lt;NA&gt;    &lt;NA&gt;                 FALSE unavailable</span></span>
+<span id="cb49-44"><a href="#cb49-44" tabindex="-1"></a><span class="co">#&gt; 6    FALSE         &lt;NA&gt;    &lt;NA&gt;                 FALSE unavailable</span></span>
+<span id="cb49-45"><a href="#cb49-45" tabindex="-1"></a><span class="co">#&gt; 7    FALSE         &lt;NA&gt;    &lt;NA&gt;                 FALSE unavailable</span></span>
+<span id="cb49-46"><a href="#cb49-46" tabindex="-1"></a><span class="co">#&gt;                    reason_code required_by_fastPLS</span></span>
+<span id="cb49-47"><a href="#cb49-47" tabindex="-1"></a><span class="co">#&gt; 1 unsupported_operating_system                TRUE</span></span>
+<span id="cb49-48"><a href="#cb49-48" tabindex="-1"></a><span class="co">#&gt; 2 unsupported_operating_system                TRUE</span></span>
+<span id="cb49-49"><a href="#cb49-49" tabindex="-1"></a><span class="co">#&gt; 3 unsupported_operating_system                TRUE</span></span>
+<span id="cb49-50"><a href="#cb49-50" tabindex="-1"></a><span class="co">#&gt; 4 unsupported_operating_system               FALSE</span></span>
+<span id="cb49-51"><a href="#cb49-51" tabindex="-1"></a><span class="co">#&gt; 5 unsupported_operating_system                TRUE</span></span>
+<span id="cb49-52"><a href="#cb49-52" tabindex="-1"></a><span class="co">#&gt; 6 unsupported_operating_system                TRUE</span></span>
+<span id="cb49-53"><a href="#cb49-53" tabindex="-1"></a><span class="co">#&gt; 7 unsupported_operating_system               FALSE</span></span>
+<span id="cb49-54"><a href="#cb49-54" tabindex="-1"></a>gpuinfo<span class="sc">::</span><span class="fu">has_cuda</span>()</span>
+<span id="cb49-55"><a href="#cb49-55" tabindex="-1"></a><span class="co">#&gt; [1] FALSE</span></span>
+<span id="cb49-56"><a href="#cb49-56" tabindex="-1"></a>gpuinfo<span class="sc">::</span><span class="fu">has_metal</span>()</span>
+<span id="cb49-57"><a href="#cb49-57" tabindex="-1"></a><span class="co">#&gt; [1] TRUE</span></span></code></pre></div>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" tabindex="-1"></a><span class="cf">if</span> (fastPLS<span class="sc">::</span><span class="fu">cuda_info</span>()<span class="sc">$</span>available) {</span>
 <span id="cb50-2"><a href="#cb50-2" tabindex="-1"></a>    fit_gpu <span class="ot">&lt;-</span> <span class="fu">pls</span>(</span>
 <span id="cb50-3"><a href="#cb50-3" tabindex="-1"></a>    Xtrain,</span>
 <span id="cb50-4"><a href="#cb50-4" tabindex="-1"></a>    Ytrain_cls,</span>
@@ -2325,7 +2392,7 @@ redirected to CPU.</p>
 <span id="cb50-19"><a href="#cb50-19" tabindex="-1"></a>    <span class="at">classifier =</span> <span class="st">&quot;lda&quot;</span></span>
 <span id="cb50-20"><a href="#cb50-20" tabindex="-1"></a>    )</span>
 <span id="cb50-21"><a href="#cb50-21" tabindex="-1"></a>}</span></code></pre></div>
-<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">has_metal</span>()) {</span>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" tabindex="-1"></a><span class="cf">if</span> (gpuinfo<span class="sc">::</span><span class="fu">has_metal</span>()) {</span>
 <span id="cb51-2"><a href="#cb51-2" tabindex="-1"></a>    Xtrain_metal <span class="ot">&lt;-</span> float<span class="sc">::</span><span class="fu">fl</span>(<span class="fu">as.matrix</span>(Xtrain))</span>
 <span id="cb51-3"><a href="#cb51-3" tabindex="-1"></a>    Xtest_metal <span class="ot">&lt;-</span> float<span class="sc">::</span><span class="fu">fl</span>(<span class="fu">as.matrix</span>(Xtest))</span>
 <span id="cb51-4"><a href="#cb51-4" tabindex="-1"></a>    fit_metal <span class="ot">&lt;-</span> <span class="fu">pls</span>(</span>
@@ -2448,15 +2515,15 @@ Systems</em>, 58, 109-130.</li>
 <span id="cb54-18"><a href="#cb54-18" tabindex="-1"></a><span class="co">#&gt; [7] base     </span></span>
 <span id="cb54-19"><a href="#cb54-19" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb54-20"><a href="#cb54-20" tabindex="-1"></a><span class="co">#&gt; other attached packages:</span></span>
-<span id="cb54-21"><a href="#cb54-21" tabindex="-1"></a><span class="co">#&gt; [1] fastPLS_0.3</span></span>
+<span id="cb54-21"><a href="#cb54-21" tabindex="-1"></a><span class="co">#&gt; [1] fastPLS_0.4</span></span>
 <span id="cb54-22"><a href="#cb54-22" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb54-23"><a href="#cb54-23" tabindex="-1"></a><span class="co">#&gt; loaded via a namespace (and not attached):</span></span>
 <span id="cb54-24"><a href="#cb54-24" tabindex="-1"></a><span class="co">#&gt;  [1] digest_0.6.39   R6_2.6.1        fastmap_1.2.0   xfun_0.60      </span></span>
-<span id="cb54-25"><a href="#cb54-25" tabindex="-1"></a><span class="co">#&gt;  [5] float_0.3-3     cachem_1.1.0    knitr_1.51      htmltools_0.5.9</span></span>
-<span id="cb54-26"><a href="#cb54-26" tabindex="-1"></a><span class="co">#&gt;  [9] rmarkdown_2.31  lifecycle_1.0.5 cli_3.6.6       sass_0.4.10    </span></span>
-<span id="cb54-27"><a href="#cb54-27" tabindex="-1"></a><span class="co">#&gt; [13] jquerylib_0.1.4 compiler_4.6.0  tools_4.6.0     evaluate_1.0.5 </span></span>
-<span id="cb54-28"><a href="#cb54-28" tabindex="-1"></a><span class="co">#&gt; [17] bslib_0.12.0    yaml_2.3.12     otel_0.2.0      rlang_1.3.0    </span></span>
-<span id="cb54-29"><a href="#cb54-29" tabindex="-1"></a><span class="co">#&gt; [21] jsonlite_2.0.0</span></span></code></pre></div>
+<span id="cb54-25"><a href="#cb54-25" tabindex="-1"></a><span class="co">#&gt;  [5] float_0.3-3     cachem_1.1.0    gpuinfo_0.2.0   knitr_1.51     </span></span>
+<span id="cb54-26"><a href="#cb54-26" tabindex="-1"></a><span class="co">#&gt;  [9] htmltools_0.5.9 rmarkdown_2.31  lifecycle_1.0.5 cli_3.6.6      </span></span>
+<span id="cb54-27"><a href="#cb54-27" tabindex="-1"></a><span class="co">#&gt; [13] sass_0.4.10     jquerylib_0.1.4 compiler_4.6.0  tools_4.6.0    </span></span>
+<span id="cb54-28"><a href="#cb54-28" tabindex="-1"></a><span class="co">#&gt; [17] evaluate_1.0.5  bslib_0.12.0    yaml_2.3.12     otel_0.2.0     </span></span>
+<span id="cb54-29"><a href="#cb54-29" tabindex="-1"></a><span class="co">#&gt; [21] rlang_1.3.0     jsonlite_2.0.0</span></span></code></pre></div>
 </div>
 
 

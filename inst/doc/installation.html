@@ -515,10 +515,12 @@ CPU library and accelerator capabilities:</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="fu">library</span>(fastPLS)</span>
 <span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a></span>
 <span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a><span class="fu">fastPLS_blas</span>()</span>
-<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a><span class="fu">cuda_info</span>()</span>
-<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a><span class="fu">has_cuda</span>()</span>
-<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a><span class="fu">has_metal</span>()</span>
-<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a><span class="fu">packageVersion</span>(<span class="st">&quot;fastPLS&quot;</span>)</span></code></pre></div>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a>fastPLS<span class="sc">::</span><span class="fu">cuda_info</span>()</span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a>gpuinfo<span class="sc">::</span><span class="fu">has_cuda</span>()</span>
+<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a>gpuinfo<span class="sc">::</span><span class="fu">has_metal</span>()</span>
+<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a>gpuinfo<span class="sc">::</span><span class="fu">cpu_info</span>()</span>
+<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a>gpuinfo<span class="sc">::</span><span class="fu">system_memory_info</span>()</span>
+<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a><span class="fu">packageVersion</span>(<span class="st">&quot;fastPLS&quot;</span>)</span></code></pre></div>
 <p>The <code>backend</code> field is <code>&quot;Accelerate&quot;</code>,
 <code>&quot;OpenBLAS&quot;</code>, or <code>&quot;R BLAS/LAPACK&quot;</code>. For OpenBLAS
 builds, the report also contains the library version, full configuration
@@ -543,11 +545,11 @@ combined with verified results.</p>
 <span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">pls</span>(X, y, <span class="at">ncomp =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">backend =</span> <span class="st">&quot;cpu&quot;</span>, <span class="at">seed =</span> <span class="dv">11</span>)</span>
 <span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a><span class="fu">stopifnot</span>(<span class="fu">length</span>(fit<span class="sc">$</span>Yfit) <span class="sc">==</span> <span class="dv">2</span><span class="dt">L</span>)</span>
 <span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a></span>
-<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">has_cuda</span>()) {</span>
+<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a><span class="cf">if</span> (fastPLS<span class="sc">::</span><span class="fu">cuda_info</span>()<span class="sc">$</span>available) {</span>
 <span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a>    fit_cuda <span class="ot">&lt;-</span> <span class="fu">pls</span>(X, y, <span class="at">ncomp =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">backend =</span> <span class="st">&quot;cuda&quot;</span>, <span class="at">seed =</span> <span class="dv">11</span>)</span>
 <span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a>}</span>
 <span id="cb14-10"><a href="#cb14-10" tabindex="-1"></a></span>
-<span id="cb14-11"><a href="#cb14-11" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">has_metal</span>()) {</span>
+<span id="cb14-11"><a href="#cb14-11" tabindex="-1"></a><span class="cf">if</span> (gpuinfo<span class="sc">::</span><span class="fu">has_metal</span>()) {</span>
 <span id="cb14-12"><a href="#cb14-12" tabindex="-1"></a>    fit_metal <span class="ot">&lt;-</span> <span class="fu">pls</span>(X, y, <span class="at">ncomp =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">backend =</span> <span class="st">&quot;metal&quot;</span>, <span class="at">seed =</span> <span class="dv">11</span>)</span>
 <span id="cb14-13"><a href="#cb14-13" tabindex="-1"></a>}</span></code></pre></div>
 </div>
@@ -652,10 +654,10 @@ not name an x86-64 OpenBLAS archive.</p>
 </div>
 <div id="cuda-or-metal-is-unavailable-after-installation" class="section level3">
 <h3>CUDA or Metal is unavailable after installation</h3>
-<p><code>cuda_info()</code>, <code>has_cuda()</code>, and
-<code>has_metal()</code> describe the installed package and current
-hardware. <code>cuda_info()</code> distinguishes a CUDA-enabled build
-with a visible device, a build without CUDA, and an explicit
+<p><code>gpuinfo::has_cuda()</code> and
+<code>gpuinfo::has_metal()</code> describe hardware and driver
+availability, whereas <code>fastPLS::cuda_info()</code> distinguishes a
+CUDA-enabled build with a visible device, a build without CUDA, and a
 diagnostic-only build. Install a compatible toolkit without changing a
 working host driver, then rebuild from source. Use
 <code>FASTPLS_REQUIRE_CUDA=1</code> or <code>FASTPLS_USE_METAL=1</code>
@@ -668,6 +670,18 @@ library directory. If it reports an unsupported host compiler, point
 that toolkit. A runtime error after a successful build usually indicates
 that the host driver is too old for the toolkit runtime or that the
 container was started without NVIDIA GPU passthrough.</p>
+<p>The dependency <code>gpuinfo</code> 0.2.0 or later supplies a CUDA
+shared-library inventory in <code>fastPLS::cuda_info()$libraries</code>.
+The <code>required_by_fastPLS</code> column marks the driver, CUDA
+Runtime, cuBLAS, cuSOLVER, and cuRAND. Missing cuFFT or NCCL does not
+prevent fastPLS calculations. The <code>available</code> and
+<code>status</code> fields describe fastPLS’s own linked runtime;
+<code>hardware_available</code> is an independent driver observation
+from gpuinfo. A separately missing library in the inventory does not
+override a working linked runtime. Use qualified names because both
+packages export <code>cuda_info()</code>. Numerical operations check
+fastPLS’s native backend directly, without repeating the system
+inventory for every fit or fold.</p>
 </div>
 <div id="the-vignette-is-not-found-after-a-github-installation" class="section level3">
 <h3>The vignette is not found after a GitHub installation</h3>
@@ -681,9 +695,10 @@ requested. Install with <code>build_vignettes=TRUE</code>, then use:</p>
 <p>Retain the package installation output and record the resulting
 environment:</p>
 <div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="fu">fastPLS_blas</span>()</span>
-<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a><span class="fu">cuda_info</span>()</span>
-<span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a><span class="fu">has_cuda</span>()</span>
-<span id="cb18-4"><a href="#cb18-4" tabindex="-1"></a><span class="fu">has_metal</span>()</span></code></pre></div>
+<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a>fastPLS<span class="sc">::</span><span class="fu">cuda_info</span>()</span>
+<span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a>gpuinfo<span class="sc">::</span><span class="fu">has_cuda</span>()</span>
+<span id="cb18-4"><a href="#cb18-4" tabindex="-1"></a>gpuinfo<span class="sc">::</span><span class="fu">has_metal</span>()</span>
+<span id="cb18-5"><a href="#cb18-5" tabindex="-1"></a>gpuinfo<span class="sc">::</span><span class="fu">hardware_manifest</span>(<span class="at">memory =</span> <span class="st">&quot;none&quot;</span>)</span></code></pre></div>
 <p>For benchmark reports, retain the output of
 <code>fastPLS_blas()</code> and also record compiler versions, the
 resolved OpenBLAS library, OpenBLAS release and selected CPU core (or
@@ -713,15 +728,15 @@ thread count, operating system, and CPU/GPU hardware.</p>
 <span id="cb19-18"><a href="#cb19-18" tabindex="-1"></a><span class="co">#&gt; [7] base     </span></span>
 <span id="cb19-19"><a href="#cb19-19" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb19-20"><a href="#cb19-20" tabindex="-1"></a><span class="co">#&gt; other attached packages:</span></span>
-<span id="cb19-21"><a href="#cb19-21" tabindex="-1"></a><span class="co">#&gt; [1] fastPLS_0.3</span></span>
+<span id="cb19-21"><a href="#cb19-21" tabindex="-1"></a><span class="co">#&gt; [1] fastPLS_0.4</span></span>
 <span id="cb19-22"><a href="#cb19-22" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb19-23"><a href="#cb19-23" tabindex="-1"></a><span class="co">#&gt; loaded via a namespace (and not attached):</span></span>
 <span id="cb19-24"><a href="#cb19-24" tabindex="-1"></a><span class="co">#&gt;  [1] digest_0.6.39   R6_2.6.1        fastmap_1.2.0   xfun_0.60      </span></span>
-<span id="cb19-25"><a href="#cb19-25" tabindex="-1"></a><span class="co">#&gt;  [5] float_0.3-3     cachem_1.1.0    knitr_1.51      htmltools_0.5.9</span></span>
-<span id="cb19-26"><a href="#cb19-26" tabindex="-1"></a><span class="co">#&gt;  [9] rmarkdown_2.31  lifecycle_1.0.5 cli_3.6.6       sass_0.4.10    </span></span>
-<span id="cb19-27"><a href="#cb19-27" tabindex="-1"></a><span class="co">#&gt; [13] jquerylib_0.1.4 compiler_4.6.0  tools_4.6.0     evaluate_1.0.5 </span></span>
-<span id="cb19-28"><a href="#cb19-28" tabindex="-1"></a><span class="co">#&gt; [17] bslib_0.12.0    yaml_2.3.12     otel_0.2.0      rlang_1.3.0    </span></span>
-<span id="cb19-29"><a href="#cb19-29" tabindex="-1"></a><span class="co">#&gt; [21] jsonlite_2.0.0</span></span></code></pre></div>
+<span id="cb19-25"><a href="#cb19-25" tabindex="-1"></a><span class="co">#&gt;  [5] float_0.3-3     cachem_1.1.0    gpuinfo_0.2.0   knitr_1.51     </span></span>
+<span id="cb19-26"><a href="#cb19-26" tabindex="-1"></a><span class="co">#&gt;  [9] htmltools_0.5.9 rmarkdown_2.31  lifecycle_1.0.5 cli_3.6.6      </span></span>
+<span id="cb19-27"><a href="#cb19-27" tabindex="-1"></a><span class="co">#&gt; [13] sass_0.4.10     jquerylib_0.1.4 compiler_4.6.0  tools_4.6.0    </span></span>
+<span id="cb19-28"><a href="#cb19-28" tabindex="-1"></a><span class="co">#&gt; [17] evaluate_1.0.5  bslib_0.12.0    yaml_2.3.12     otel_0.2.0     </span></span>
+<span id="cb19-29"><a href="#cb19-29" tabindex="-1"></a><span class="co">#&gt; [21] rlang_1.3.0     jsonlite_2.0.0</span></span></code></pre></div>
 </div>
 
 

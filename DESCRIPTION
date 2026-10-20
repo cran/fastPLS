@@ -1,8 +1,8 @@
 Package: fastPLS
 Type: Package
 Title: Fast Partial Least Squares for High-Dimensional Data
-Version: 0.3
-Date: 2026-09-26
+Version: 0.4
+Date: 2026-10-15
 Authors@R: c(
     person(
         "Stefano", "Cacciatore", role = c("aut", "cre"),
@@ -46,14 +46,14 @@ SystemRequirements: Optional OpenBLAS development libraries for faster
         framework on macOS. CPU-only builds do not require GPU
         software.
 Depends: R (>= 4.6.0)
-Imports: methods, float
+Imports: methods, float, gpuinfo (>= 0.2.0)
 Suggests: knitr, rmarkdown, testthat (>= 3.0.0)
 VignetteBuilder: knitr
 NeedsCompilation: yes
 Config/testthat/edition: 3
 Encoding: UTF-8
 Config/roxygen2/version: 8.1.0
-Packaged: 2026-09-28 16:37:01 UTC; stefano
+Packaged: 2026-10-18 21:31:55 UTC; stefano
 Author: Stefano Cacciatore [aut, cre] (ORCID:
     <https://orcid.org/0000-0001-7052-7156>),
   Dupe Ojo [aut] (ORCID: <https://orcid.org/0000-0002-5301-8592>),
@@ -61,4 +61,4 @@ Author: Stefano Cacciatore [aut, cre] (ORCID:
   Alessia Vignoli [aut] (ORCID: <https://orcid.org/0000-0003-4038-6596>)
 Maintainer: Stefano Cacciatore <tkcaccia@gmail.com>
 Repository: CRAN
-Date/Publication: 2026-09-28 18:20:08 UTC
+Date/Publication: 2026-10-20 12:20:09 UTC

@@ -38,8 +38,9 @@ library(fastPLS)
 # library(fastPLS)
 # 
 # fastPLS_blas()
-# has_cuda()
-# has_metal()
+# fastPLS::cuda_info()
+# gpuinfo::has_cuda()
+# gpuinfo::has_metal()
 
 ## ----chunk-002----------------------------------------------------
 set.seed(100)
@@ -649,11 +650,12 @@ s64$d
 inherits(s32$u, "float32")
 
 ## ----chunk-038----------------------------------------------------
-has_cuda()
-has_metal()
+fastPLS::cuda_info()
+gpuinfo::has_cuda()
+gpuinfo::has_metal()
 
 ## ----chunk-039, eval = FALSE--------------------------------------
-# if (has_cuda()) {
+# if (fastPLS::cuda_info()$available) {
 #     fit_gpu <- pls(
 #     Xtrain,
 #     Ytrain_cls,
@@ -676,7 +678,7 @@ has_metal()
 # }
 
 ## ----chunk-040, eval = FALSE--------------------------------------
-# if (has_metal()) {
+# if (gpuinfo::has_metal()) {
 #     Xtrain_metal <- float::fl(as.matrix(Xtrain))
 #     Xtest_metal <- float::fl(as.matrix(Xtest))
 #     fit_metal <- pls(
